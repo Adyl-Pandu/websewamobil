@@ -1,11 +1,18 @@
 <?php
-session_start();
+    include 'php/koneksi.php';
+    session_start();
 
-if (isset($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] === true) {
-    header("Location: dashboard.php");
-    exit();
-}
+    header("Cache-Control: no-cache, no-store, must-revalidate");
+    header("Pragma: no-cache");
+    header("Expires: 0");
+
+    // Redirect ke dashboard jika sudah login
+    if (isset($_SESSION['username'])) {
+        header("Location: dashboard.php");
+      exit;
+    }
 ?>
+
 
 <!DOCTYPE html>
 <html>
@@ -50,15 +57,15 @@ if (isset($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] === true) {
                             <div class="alert alert-danger text-center">
                                 <?php
                                     if ($_GET['error'] == 'password') echo "Password salah!";
-                                    elseif ($_GET['error'] == 'username') echo "Username tidak ditemukan!";
-                                    elseif ($_GET['error'] == 'empty') echo "Username dan password wajib diisi!";
+                                    elseif ($_GET['error'] == 'username') echo "username tidak ditemukan!";
+                                    elseif ($_GET['error'] == 'empty') echo "username dan password wajib diisi!";
                                 ?>
                             </div>
                         <?php endif; ?>
 
                         <form action="php/login_process.php" method="POST">
                             <div class="input-group custom">
-                                <input type="text" name="username" class="form-control form-control-lg" placeholder="Username" required>
+                                <input type="text" name="username" class="form-control form-control-lg" placeholder="username" required>
                                 <div class="input-group-append custom">
                                     <span class="input-group-text"><i class="icon-copy dw dw-user1"></i></span>
                                 </div>
@@ -97,5 +104,7 @@ if (isset($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] === true) {
             </div>
         </div>
     </div>
+    
 </body>
+
 </html>

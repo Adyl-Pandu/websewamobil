@@ -19,7 +19,7 @@
         <i class="ml-1 dw dw-down-arrow"></i>
       </a>
       <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list shadow-sm">
-        <a class="dropdown-item" href="php/log_out.php"><i class="dw dw-logout"></i> Keluar</a>
+        <a href="php/log_out.php" class="dropdown-item" ><i class="dw dw-logout"></i> Keluar</a>
       </div>
     </div>
   </div>
