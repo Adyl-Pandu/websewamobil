@@ -1,14 +1,20 @@
 <?php
-// Tidak perlu ambil data pelanggan karena ini form tambah
+include 'php/koneksi.php';
+
+// Cek apakah user sudah login
+session_start();
+if (!isset($_SESSION['username']) || !isset($_SESSION['user_id'])):
+    header('Location: index.php');
+    exit;
+endif
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 
     <!-- head kamu tetap sama -->
-    <link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="vendors/images/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="vendors/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/car-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/logo_mobil_biru.png">
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -92,6 +98,9 @@
                                     <button type="submit" class="btn btn-primary" id="submitBtn">
                                         <i class="icon-copy dw dw-diskette1"></i> Simpan Data
                                     </button>
+                                    <a href="pelanggan-lits.php" class="btn btn-primary" id="submitBtn">
+                                        <i class="icon-copy dw dw-diskette1"></i> Pelanggan lits
+                                    </a>
                                 </div>
                             </div>
                         </div>

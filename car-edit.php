@@ -24,7 +24,8 @@ $data = mysqli_fetch_assoc($result);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Mobil - RentCarPro</title>
-
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/car-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/logo_mobil_biru.png">
     <link rel="stylesheet" href="vendors/styles/core.css">
     <link rel="stylesheet" href="vendors/styles/style.css">
 </head>

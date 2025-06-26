@@ -1,9 +1,6 @@
 <?php
 session_start();
 
-// Hapus semua variabel sesi
-$_SESSION = array();
-
 // Hapus cookie sesi kalau ada
 if (ini_get("session.use_cookies")) {
     $params = session_get_cookie_params();

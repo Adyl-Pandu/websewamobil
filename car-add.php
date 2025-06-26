@@ -1,4 +1,13 @@
-<!--  -->
+<?php
+include 'php/koneksi.php';
+
+// Cek apakah user sudah login
+session_start();
+if (!isset($_SESSION['username']) || !isset($_SESSION['user_id'])):
+    header('Location: index.php');
+    exit;
+endif;
+?>
 
 
 
@@ -11,9 +20,8 @@
     <title>Tambah Mobil - RentCarPro</title>
 
     <!-- Site favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="vendors/images/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="vendors/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/car-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/logo_mobil_biru.png">
 
     <!-- Mobile Specific Metas -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -56,23 +64,6 @@
 
     <div class="main-container">
         <div class="pd-ltr-20">
-            <div class="page-header">
-                <div class="row">
-                    <div class="col-md-6 col-sm-12">
-                        <div class="title">
-                            <h4>Tambah Mobil Baru</h4>
-                        </div>
-                        <nav aria-label="breadcrumb" role="navigation">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="index.html">Halaman Utama</a></li>
-                                <li class="breadcrumb-item"><a href="car-list.php">Daftar Mobil</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Tambah Mobil</li>
-                            </ol>
-                        </nav>
-                    </div>
-                </div>
-            </div>
-
             <div class="card-box mb-30">
                 <div class="pd-20">
                     <h4 class="text-blue h4">Form Tambah Mobil</h4>

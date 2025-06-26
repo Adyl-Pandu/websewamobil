@@ -31,6 +31,7 @@ if ($result->num_rows === 1) {
     header("Location: ../index.php?error=username");
     exit;
 }
+$stmt->close();
 $conn->close();
 
 ?>

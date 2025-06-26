@@ -1,3 +1,12 @@
+<?php 
+  session_start(); 
+  // Redirect ke dashboard jika sudah login
+    if (isset($_SESSION['username'])) {
+        header("Location: dashboard.php");
+      exit;
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -5,9 +14,8 @@
   <title>BIKI Sewa Mobil Tangerang - Daftar Akun</title>
 
   <!-- Favicon -->
-  <link rel="apple-touch-icon" sizes="180x180" href="images/logo_mobil_biru.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="images/logo_mobil_biru.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="images/logo_mobil_biru.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/car-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/logo_mobil_biru.png">
 
   <!-- Responsive -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -22,7 +30,7 @@
 </head>
 
 <body class="login-page">
-<?php session_start(); ?>
+
 
   <!-- Header -->
   <div class="login-header box-shadow">

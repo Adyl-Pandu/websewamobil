@@ -4,19 +4,15 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Mulai session
+
+include 'php/koneksi.php';
+
+// Cek apakah user sudah login
 session_start();
-
-// Cek login
-if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
+if (!isset($_SESSION['username']) || !isset($_SESSION['user_id'])):
+    header('Location: index.php');
     exit;
-}
-
-// Generate CSRF Token
-if (empty($_SESSION['csrf_token'])) {
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-}
+endif;
 
 // Koneksi database
 include 'php/koneksi.php';
@@ -49,16 +45,14 @@ if (isset($_SESSION['info'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daftar Mobil - RentCarPro</title>
-    <link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="vendors/images/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="vendors/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/car-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/logo_mobil_biru.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="vendors/styles/core.css">
     <link rel="stylesheet" href="vendors/styles/icon-font.min.css">
     <link rel="stylesheet" href="src/plugins/datatables/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="vendors/styles/style.css">
     <style>
-        /* Custom Styles */
         .search-box {
             background: #f8f9fa;
             padding: 15px;
@@ -70,11 +64,30 @@ if (isset($_SESSION['info'])) {
             padding: 5px 10px;
             border-radius: 12px;
         }
-        .badge-success { background-color: #28a745; }
+        .badge-success { background-color: #28a745; color: #fff; }
         .badge-warning { background-color: #ffc107; color: #212529; }
-        .badge-secondary { background-color: #6c757d; }
-        .action-buttons .btn { margin-right: 5px; }
+        .badge-secondary { background-color: #6c757d; color: #fff; }
+        .action-buttons .btn { margin-right: 5px; margin-bottom: 5px; }
         .dataTables_wrapper .row:first-child { margin-bottom: 15px; }
+        .table-responsive {
+            overflow-x: auto;
+        }
+        table.data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table.data-table th, table.data-table td {
+            vertical-align: middle;
+            text-align: center;
+            padding: 10px;
+        }
+        table.data-table th {
+            background-color: #343a40;
+            color: #fff;
+        }
+        table.data-table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
     </style>
 </head>
 <body>
@@ -85,16 +98,16 @@ if (isset($_SESSION['info'])) {
         <div class="pd-ltr-20">
             <!-- Notifikasi -->
             <?php foreach ($notifications as $notification): ?>
-                <div class="alert alert-<?= $notification['type'] ?> alert-dismissible fade show" role="alert">
+                <div class="alert alert-<?= $notification['type'] ?> alert-dismissible fade show mb-4" role="alert">
                     <?= $notification['message'] ?>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                        <span aria-hidden="true">×</span>
                     </button>
                 </div>
             <?php endforeach; ?>
 
             <!-- Header dan Tombol Tambah -->
-            <div class="page-header">
+            <div class="page-header mb-4">
                 <div class="row align-items-center">
                     <div class="col-md-6">
                         <h4 class="mb-0">Daftar Mobil</h4>
@@ -108,13 +121,20 @@ if (isset($_SESSION['info'])) {
             </div>
 
             <!-- Form Pencarian -->
-            <div class="card-box mb-3">
+            <div class="card-box mb-4">
                 <div class="search-box">
                     <form method="GET" class="row g-2">
                         <div class="col-md-4">
                             <input type="text" name="search" class="form-control" 
-                                   placeholder="Cari merek/model/plat" 
+                                   placeholder="Cari merek/model/plat/tahun/warna" 
                                    value="<?= htmlspecialchars($_GET['search'] ?? '') ?>">
+                        </div>
+                        <div class="col-md-2">
+                            <select name="status" class="form-control">
+                                <option value="">Semua Status</option>
+                                <option value="Tersedia" <?= ($_GET['status'] ?? '') === 'Tersedia' ? 'selected' : '' ?>>Tersedia</option>
+                                <option value="Disewa" <?= ($_GET['status'] ?? '') === 'Disewa' ? 'selected' : '' ?>>Disewa</option>
+                            </select>
                         </div>
                         <div class="col-md-2">
                             <button type="submit" class="btn btn-primary w-100">Cari</button>
@@ -129,7 +149,7 @@ if (isset($_SESSION['info'])) {
             <!-- Tabel Data Mobil -->
             <div class="card-box">
                 <div class="table-responsive">
-                    <table class="data-table table stripe hover nowrap">
+                    <table class="data-table table table-striped table-hover nowrap">
                         <thead class="thead-dark">
                             <tr>
                                 <th>Merek</th>
@@ -147,16 +167,21 @@ if (isset($_SESSION['info'])) {
                             $status_class = [
                                 'Tersedia' => 'badge-success',
                                 'Disewa' => 'badge-warning',
-                                'Perawatan' => 'badge-secondary'
                             ];
 
                             $search = $_GET['search'] ?? '';
-                            $query = "SELECT * FROM mobil";
+                            $status_filter = $_GET['status'] ?? '';
+                            $query = "SELECT * FROM mobil WHERE 1=1";
                             $params = [];
-                            
+
+                            // Perluas pencarian untuk semua kolom yang relevan
                             if ($search) {
-                                $query .= " WHERE merek LIKE ? OR model LIKE ? OR plat_nomor LIKE ?";
-                                $params = ["%$search%", "%$search%", "%$search%"];
+                                $query .= " AND (merek LIKE ? OR model LIKE ? OR plat_nomor LIKE ? OR tahun LIKE ? OR warna LIKE ?)";
+                                $params = ["%$search%", "%$search%", "%$search%", "%$search%", "%$search%"];
+                            }
+                            if ($status_filter) {
+                                $query .= " AND status = ?";
+                                $params[] = $status_filter;
                             }
 
                             $stmt = $conn->prepare($query);
@@ -207,9 +232,9 @@ if (isset($_SESSION['info'])) {
             </div>
 
             <!-- Footer -->
-            <div class="footer-wrap pd-20 mt-3 card-box">
+            <div class="footer-wrap pd-20 mt-5 card-box">
                 <div class="text-center">
-                    RentCarPro &copy; <?= date('Y') ?> - Sistem Manajemen Penyewaan Mobil
+                    RentCarPro © <?= date('Y') ?> - Sistem Manajemen Penyewaan Mobil
                 </div>
             </div>
         </div>
@@ -220,20 +245,6 @@ if (isset($_SESSION['info'])) {
     <script src="vendors/scripts/script.min.js"></script>
     <script src="src/plugins/datatables/js/jquery.dataTables.min.js"></script>
     <script src="src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('.data-table').DataTable({
-                responsive: true,
-                language: {
-                    url: '//cdn.datatables.net/plug-ins/1.10.24/i18n/Indonesian.json'
-                },
-                dom: '<"top"lf>rt<"bottom"ip>',
-                columnDefs: [
-                    { orderable: false, targets: [7] } // Non-aktifkan sorting untuk kolom aksi
-                ]
-            });
-        });
-    </script>
 </body>
 </html>
 <?php

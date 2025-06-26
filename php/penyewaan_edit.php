@@ -108,7 +108,7 @@ if (isset($_POST['submit'])) {
             </div>
 
             <div class="d-flex justify-content-between">
-                <a href="daftar_transaksi.php" class="btn btn-outline-secondary">Batal</a>
+                <a href="../daftar_transaksi.php" class="btn btn-outline-secondary">Batal</a>
                 <button type="submit" name="submit" class="btn btn-primary">Simpan Perubahan</button>
             </div>
         </form>

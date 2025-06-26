@@ -25,10 +25,10 @@
                         <span class="micon dw dw-library"></span><span class="mtext">Data Master</span>
                     </a>
                     <ul class="submenu">
-                        <li><a href="car-list.php">Daftar Mobil</a></li>
                         <li><a href="car-add.php">Tambah Mobil</a></li>
                         <li><a href="pelanggan-add.php">Tambah Pelanggan</a></li>
                         <li><a href="penyewaan_list.php">Form Tambah Penyewaan</a></li>
+                        <li><a href="car-list.php">Daftar Mobil</a></li>
                     </ul>
                 </li>
 
@@ -38,8 +38,8 @@
                         <span class="micon dw dw-money"></span><span class="mtext">Data Transaksi</span>
                     </a>
                     <ul class="submenu">
-                        <li><a href="daftar_transaksi.php">Daftar Transaksi</a></li>
-                        <li><a href="payment-list.php">Pembayaran</a></li>
+                        <li><a href="daftar_transaksi.php">Pembayaran</a></li>
+                        <li><a href="payment-list.php">Daftar Transaksi</a></li>
                     </ul>
                 </li>
 

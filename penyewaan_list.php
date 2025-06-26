@@ -1,5 +1,12 @@
 <?php
+include 'php/koneksi.php';
+
+// Cek apakah user sudah login
 session_start();
+if (!isset($_SESSION['username']) || !isset($_SESSION['user_id'])):
+    header('Location: index.php');
+    exit;
+endif;
 // Buat token CSRF untuk keamanan
 $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 include 'php/koneksi.php';
@@ -9,9 +16,8 @@ include 'php/koneksi.php';
 <head>
     <meta charset="utf-8">
     <title>Tambah Penyewaan - RentCarPro</title>
-    <link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="vendors/images/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="vendors/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/car-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/logo_mobil_biru.png">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">

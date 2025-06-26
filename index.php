@@ -1,10 +1,6 @@
 <?php
-    include 'php/koneksi.php';
     session_start();
-
-    header("Cache-Control: no-cache, no-store, must-revalidate");
-    header("Pragma: no-cache");
-    header("Expires: 0");
+    include 'php/koneksi.php';
 
     // Redirect ke dashboard jika sudah login
     if (isset($_SESSION['username'])) {
@@ -25,6 +21,11 @@
     <link rel="stylesheet" type="text/css" href="vendors/styles/core.css">
     <link rel="stylesheet" type="text/css" href="vendors/styles/icon-font.min.css">
     <link rel="stylesheet" type="text/css" href="vendors/styles/style.css">
+    <script type="text/javascript">
+        setTimeout(() =>window.history.forward(),0);
+        window.onunload=()=>{null};
+    </script>
+
 </head>
 <body class="login-page">
     <div class="login-header box-shadow">
